@@ -1,0 +1,48 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+{% block title %}HomePage{% endblock %}
+{% block content %}
+    <div class='container'>
+        {% if err %}
+            <p style='background-color:red; color:white; text-align:center;'>
+                {{ err }}
+            </p>
+        {% endif %}
+        <h2 style='text-align:center;'>Results</h2>
+        {% comment %} {% if present_columns|length < 10 %}
+            <div class='row'>
+            {% for i in data %}
+                <div class="card border-danger mb-3" style="max-width: 18rem;">
+                    {% for j in present_columns %}
+                        <div class="card-body text-danger">
+                            {% load get_data %}
+                            <h5 class="card-title" style='text-align:center;'>{{ i|get_data:j }}</h5>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            </div>
+        {% else %} {% endcomment %}
+            <div id ='tab' class='table-responsive text-nowrap' style='height:400px'>
+                <table class="table table-striped"
+                       style="font-size: 10px; border:1px"
+                       style='overflow-x:scroll;
+                              overflow-y:scroll;'>
+                    <tr>
+                        {% for i in present_columns %}
+                            <th style='top:0; position:sticky; background-color:red; color:white;'>{{i }}</th>
+                        {% endfor %}
+                    </tr>
+                    {% for i in data %}
+                        <tr height="2px">
+                            {% for j in present_columns %}
+                                {% load get_data %}
+                                <td>{{ i|get_data:j }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% comment %} {% endif %} {% endcomment %}
+    {% endblock %}
+    {% block javascript %}{% endblock %}

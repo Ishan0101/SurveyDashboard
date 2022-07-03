@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {% block title %}{% endblock %}
+        </title>
+        {% block stylesheets %}
+            <!-- CSS only -->
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+            <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+                  integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+                  crossorigin="anonymous"
+                  referrerpolicy="no-referrer"/>
+            <style>
+                    li:not(:last-child) {
+                        margin-bottom: 1rem;
+                        }
+            </style>
+        {% endblock %}
+        {% block extra_head %}
+            <!-- JavaScript Bundle with Popper -->
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="row flex-nowrap">
+                {% block navbar %}{% endblock %}
+            <div class="col py-3">
+                <div class='container'>
+                    {% block messages %}<div id='msg'></div>{% endblock %}
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            {% block footer %}{% endblock %}
+        </div>
+        {% block javascript %}{% endblock %}
+        {% block extra_js %}<script type="text/javascript"></script>{% endblock %}
+        {% block extra_footer %}{% endblock %}
+    </body>
+</html>

@@ -16,7 +16,7 @@
                         <div class="panel-body">
                             <div class="text-center">
                                 <p>
-                                   Select The Question Variable Name
+                                   Select The Question To View Results
                                 </p>
                                 <form id="register-form" role="form" autocomplete="off" class="form" method="post">
                                     {% csrf_token %}
@@ -24,11 +24,11 @@
                                         <div class="input-group">
                                             <select class="form-control" id="sel1" name='variablename'>
                                                 <option selected="true" disabled="disabled">
-                                                    Please select the variable name
+                                                    Please select the question
                                                 </option>
-                                                {% for i in present_columns %}
-                                                <option>
-                                                    {{i}}
+                                                {% for i,j in column_list %}
+                                                <option value={{i}}>
+                                                    {{j}}
                                                 </option>
                                                 {% endfor %}
                                             </select>
@@ -44,10 +44,11 @@
                 </div>
             </div>
         </div>
-        <div id ='tab' class='table-responsive text-nowrap' style='height:400px'>
+        <h4 style='text-align:center;'>Results of the Survey</h4>
+        <div id ='tab' class='table-responsive text-nowrap' style='height:400px;'>
             <table class="table table-stripped" style="font-size: 10px; border:1px" style='overflow-x:scroll; overflow-y:scroll;'>
                 <tr>
-                    {% for i in present_columns %}<th style='top:0; position:sticky; background-color:red; color:white;'>{{i }}</th>{% endfor %}
+                    {% for i in present_columns1 %}<th style='top:0; position:sticky; background-color:#da251c; color:white;'>{{i }}</th>{% endfor %}
                 </tr>
                 {% for i in data %}
                     <tr height="2px">

@@ -1,0 +1,62 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+{% block title %}Selected Survey Results{% endblock %}
+{% block content %}
+    <div class='container'>
+        {% if err %}
+            <p style='background-color:red; color:white; text-align:center;'>
+                {{ err }}
+            </p>
+        {% endif %}
+        <h2 style='text-align:center;'>{{ survey_title }} Results</h2>
+        <hr/>
+        <div class="container forget-password">
+            <div class="row">
+                <div class="col-md-12 col-md-offset-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="text-center">
+                                <p>
+                                   Select The Question To View Results
+                                </p>
+                                <form id="register-form" role="form" autocomplete="off" class="form" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="form-control" id="sel1" name='variablename' required>
+                                                {% for i,j in column_list %}
+                                                <option value={{i}}>
+                                                    {{j}}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input name="btnForget" class="btn btn-danger" value="submit" type="submit">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 style='text-align:center;'>Results of the Survey</h4>
+        <div id ='tab' class='table-responsive text-nowrap' style='height:400px;'>
+            <table class="table table-stripped" style="font-size: 10px; border:1px" style='overflow-x:scroll; overflow-y:scroll;'>
+                <tr>
+                    {% for i in present_columns1 %}<th style='top:0; position:sticky; background-color:#da251c; color:white;'>{{i }}</th>{% endfor %}
+                </tr>
+                {% for i in data %}
+                    <tr height="2px">
+                        {% for j in present_columns %}
+                            {% load get_data %}
+                            <td>{{ i|get_data:j }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endblock %}
+    {% block javascript %}{% endblock %}

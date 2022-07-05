@@ -1,3 +1,13 @@
-<nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand" href="{% url 'SurveyResult:home' %}" style='color:#da251c'><i class="fa fa-home fa-lg" aria-hidden="true"></i> Home</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+            <a  href="{% url 'SurveyResult:home' %}" style='color:#da251c; padding:10px'><i class="fa fa-home fa-lg" aria-hidden="true"></i> Home</a>
+        </li>
+        <li class="nav-item">
+            <a  href="{% url 'SurveyResult:selected_survey' %}" style='color:#da251c; padding:10px;'><i class="fa fa-check-circle fa-lg" aria-hidden="true"></i> Selected Survey</a>
+        </li>
+        
+      </ul>
+    </div>
 </nav>

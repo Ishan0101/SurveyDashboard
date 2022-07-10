@@ -201,3 +201,57 @@ class Response(View):
             context = {'data': data,'present_columns':present_columns,'option_value':option_value,'variablename':variablename,'present_columns1':present_columns1}
             return render(request,'SurveyResult/responselist.html',context)
 
+
+class AllResults(View):
+    def get(self,request):
+        global q_id
+        global q_version
+        global df
+        global question_df
+        try:
+            client = ssaw.Client('https://cssapp.dishhome.com.np', 'DH_Datateam', 'Balen12345*#')
+            q_doc =  QuestionnairesApi(client).document(id = q_id,version = q_version)
+            Group.update_forward_refs()
+            q = QuestionnaireDocument.parse_obj(q_doc)
+            flat_list = get_properties(q)
+            present_columns = df.columns.to_list()
+            all_data = pd.DataFrame(columns=['variable_name','count'])
+            for k in present_columns:
+                if flat_list[k].obj_type == 'MultyOptionsQuestion':
+                    choice_list = []
+                    for i in flat_list[k].answers:
+                        choice_list.append(i.answer_text)
+                    all_data.loc[len(all_data.index)] = [k,'']
+                    for i in choice_list:
+                        count = 0
+                        for j in df[k]:
+                            if j is not None:
+                                if j.find(i) !=-1:
+                                    count = count+1
+                        all_data.loc[len(all_data.index)] = [i,count]
+                    all_data.loc[len(all_data.index)] = ['','']
+                    all_data.loc[len(all_data.index)] = ['','']
+                elif flat_list[k].obj_type == 'SingleQuestion':
+                    all_data.loc[len(all_data.index)] = [k,'']
+                    res = df.groupby(k).count().reset_index()
+                    res = res.iloc[:,:2]
+                    result = res.rename(columns={res.columns[1]:'Count'})
+                    for idx,rows in result.iterrows():
+                        all_data.loc[len(all_data.index)] = [rows[k],rows['Count']]
+                    all_data.loc[len(all_data.index)] = ['','']
+                    all_data.loc[len(all_data.index)] = ['','']
+                else:
+                    pass
+            all_data = all_data.merge(question_df,on = 'variable_name',how='left')
+            all_data['question_text'].fillna(value=all_data['variable_name'], inplace=True)
+            print(all_data)
+            all_data['variable_name'] = all_data['question_text']
+            all_data.drop ('question_text', axis=1, inplace=True)
+            columns = all_data.columns.to_list()
+            json_records = all_data.reset_index().to_json(orient ='records')
+            data = []
+            data = json.loads(json_records)
+            context = {'columns':columns,'data': data}
+        except:
+            context={'err':'Please enter correct survey details !!!'}
+        return render(request,'SurveyResult/allresults.html',context)
